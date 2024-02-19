@@ -15,4 +15,16 @@ class User {
    'email': email,
   };
  }
+
+  User copyWith({
+   int? id,
+   String? name,
+   String? email,
+  }){
+  return User(
+      name: name?? this.name,
+      email:email?? this.email,
+      id: id?? this.id,
+  );
+ }
 }

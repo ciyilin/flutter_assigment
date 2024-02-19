@@ -1,16 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertest/provider/user_provider.dart';
 import 'package:fluttertest/utils/extensions.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../models/User.dart';
-import '../provider/user_notifier.dart';
-import '../provider/user_state.dart';
 import '../screen/my_home_page.dart';
-import '../widgets/add_user_dialog.dart';
-
-
-
 
 class UserListWidget extends ConsumerStatefulWidget {
   const UserListWidget({Key? key}) : super(key: key);
@@ -22,7 +19,9 @@ class UserListWidget extends ConsumerStatefulWidget {
 class _UserListWidgetState extends ConsumerState<UserListWidget> {
   late final TextEditingController _searchController;
 
-
+  int get id => id;
+  String get name => name;
+  String get email => email;
 
   @override
   void initState() {
@@ -61,7 +60,7 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
             ),
             onChanged: (value) {
               setState(() {
-                _searchController.text =value;
+                _searchController.text = value;
               });
               filteredUsers = _filterUsers(searchText, userList);
             },
@@ -79,8 +78,9 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                     motion: const ScrollMotion(),
                     dismissible: DismissiblePane(
                       onDismissed: () {
-                        userNotifier.deleteUser(user.id).then((_)=>setState((){})
-                        );
+                        userNotifier.deleteUser(user.id).then((_){
+                          log("successful delete");
+                        });
                       },
                     ),
                     children: const <Widget>[
@@ -99,7 +99,8 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                     ),
                     title: Text(
                       user.name!,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.normal),
                     ),
                     subtitle: Text(
                       user.email!,
@@ -120,7 +121,9 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
     if (searchText.isEmpty) {
       return userList;
     }
-    return userList.where((user) =>
-        user.name!.toLowerCase().contains(searchText.toLowerCase())).toList();
+    return userList
+        .where((user) =>
+            user.name!.toLowerCase().contains(searchText.toLowerCase()))
+        .toList();
   }
 }
