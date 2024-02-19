@@ -52,4 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-void doNothing(BuildContext context) {}
+void doNothing(BuildContext context) {
+
+}
