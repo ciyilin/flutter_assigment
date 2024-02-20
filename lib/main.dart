@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertest/router/router.dart';
 import 'package:fluttertest/screen/my_home_page.dart';
 import 'package:fluttertest/utils/extensions.dart';
 
@@ -17,13 +18,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: router,
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         backgroundColor:colors.onPrimary,
       ),
-      home: const MyHomePage (),
     );
   }
 }

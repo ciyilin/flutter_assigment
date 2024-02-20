@@ -1,13 +1,15 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertest/provider/user_provider.dart';
+import 'package:fluttertest/screen/detail_page.dart';
 import 'package:fluttertest/utils/extensions.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import '../models/User.dart';
-import '../screen/my_home_page.dart';
+import 'package:fluttertest/router/router.dart';
+
+
 
 class UserListWidget extends ConsumerStatefulWidget {
   const UserListWidget({Key? key}) : super(key: key);
@@ -20,7 +22,9 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
   late final TextEditingController _searchController;
 
   int get id => id;
+
   String get name => name;
+
   String get email => email;
 
   @override
@@ -71,21 +75,25 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
               itemCount: filteredUsers.length,
               itemBuilder: (context, index) {
                 final user = filteredUsers[index];
-                return Slidable(
+                return GestureDetector(
+                  onTap: (){
+                    return context.go('detail');
+                  },
+                  child: Slidable(
                   key: const ValueKey(0),
                   startActionPane: ActionPane(
                     dragDismissible: true,
                     motion: const ScrollMotion(),
                     dismissible: DismissiblePane(
                       onDismissed: () {
-                        userNotifier.deleteUser(user.id).then((_){
+                        userNotifier.deleteUser(user.id).then((_) {
                           log("successful delete");
                         });
                       },
                     ),
                     children: const <Widget>[
                       SlidableAction(
-                        onPressed: doNothing,
+                        onPressed:doNothing ,
                         backgroundColor: Color(0xFFFE4A49),
                         foregroundColor: Colors.white,
                         icon: Icons.delete,
@@ -107,7 +115,7 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                       style: const TextStyle(fontSize: 12),
                     ),
                   ),
-                );
+                  ));
               },
             ),
           ),
@@ -127,3 +135,5 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
         .toList();
   }
 }
+
+void doNothing(BuildContext context) {}

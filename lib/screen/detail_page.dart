@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DetailPage extends ConsumerStatefulWidget{
@@ -34,8 +32,8 @@ class _DetailPageState extends ConsumerState<DetailPage> {
               ),
               borderRadius: BorderRadius.circular(0.8),
             ),
-            child: Row(
-              textDirection: ,
+            child: const Row(
+
             ),
           )
         ],
