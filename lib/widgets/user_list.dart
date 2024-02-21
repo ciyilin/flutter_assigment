@@ -74,7 +74,10 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                 final user = filteredUsers[index];
                 return GestureDetector(
                   onTap: (){
-                    return context.go('/detail',extra:userList[index] );
+                    Navigator.push(
+                        (context),
+                      MaterialPageRoute(builder: (context)=> DetailPage())
+                    );
                   },
                   child: Slidable(
                   key: const ValueKey(0),
