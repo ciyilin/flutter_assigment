@@ -3,13 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertest/provider/user_provider.dart';
-import 'package:fluttertest/screen/detail_page.dart';
-import 'package:fluttertest/utils/extensions.dart';
-import 'package:go_router/go_router.dart';
 import '../models/User.dart';
-import 'package:fluttertest/router/router.dart';
-
-
+import '../screen/user_page.dart';
 
 class UserListWidget extends ConsumerStatefulWidget {
   const UserListWidget({Key? key}) : super(key: key);
@@ -22,7 +17,9 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
   late final TextEditingController _searchController;
 
   int get id => id;
+
   String get name => name;
+
   String get email => email;
 
   @override
@@ -45,9 +42,8 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
     final userNotifier = ref.watch(userProvider.notifier);
     var filteredUsers = _filterUsers(searchText, userList);
     return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        children: [
+        padding: const EdgeInsets.all(8),
+        child: Column(children: [
           const SizedBox(height: 20),
           TextField(
             controller: _searchController,
@@ -68,52 +64,53 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
           ),
           const SizedBox(height: 12),
           Expanded(
-            child: ListView.builder(
-              itemCount: filteredUsers.length,
-              itemBuilder: (context, index) {
-                final user = filteredUsers[index];
-                return GestureDetector(
-                  onTap: (){
-                    Navigator.push(
-                        (context),
-                      MaterialPageRoute(builder: (context)=> DetailPage())
-                    );
-                  },
-                  child: Slidable(
-                  key: const ValueKey(0),
-                  startActionPane: ActionPane(
-                    dragDismissible: true,
-                    motion: const ScrollMotion(),
-                    dismissible: DismissiblePane(
-                      onDismissed: () {
-                        userNotifier.deleteUser(user.id).then((_) {
-                          log("successful delete");
-                        });
-                      }),
-                    children: const <Widget>[
-                      SlidableAction(
-                        onPressed:doNothing ,
-                        backgroundColor: Color(0xFFFE4A49),
-                        foregroundColor: Colors.white,
-                        icon: Icons.delete,
-                        label: 'Delete',
-                      ),
-                    ],
-                  ),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      child: Image.asset('assets/image/user.png'),
-                    ),
-                    title: Text(
-                      user.name!,
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.normal),
-                    ),
-                    subtitle: Text(
-                      user.email!,
-                      style: const TextStyle(fontSize: 12),
-                    ))));
-              }))]));
+              child: ListView.builder(
+                  itemCount: filteredUsers.length,
+                  itemBuilder: (context, index) {
+                    final user = filteredUsers[index];
+                    return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              (context),
+                              MaterialPageRoute(
+                                  builder: (context) => UserPage(user: user)));
+                        },
+                        child: Slidable(
+                            key: const ValueKey(0),
+                            startActionPane: ActionPane(
+                              dragDismissible: true,
+                              motion: const ScrollMotion(),
+                              dismissible: DismissiblePane(onDismissed: () {
+                                userNotifier.deleteUser(user.id).then((_) {
+                                  log("successful delete");
+                                });
+                              }),
+                              children: const <Widget>[
+                                SlidableAction(
+                                  onPressed: doNothing,
+                                  backgroundColor: Color(0xFFFE4A49),
+                                  foregroundColor: Colors.white,
+                                  icon: Icons.delete,
+                                  label: 'Delete',
+                                ),
+                              ],
+                            ),
+                            child: ListTile(
+                                leading: CircleAvatar(
+                                  child: Image.asset('assets/image/user.png',height: 20,width: 20,),
+                                ),
+                                title: Text(
+                                  user.name!,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                                subtitle: Text(
+                                  user.email!,
+                                  style: const TextStyle(fontSize: 12),
+                                ))));
+                  }))
+        ]));
   }
 
   List<User> _filterUsers(String searchText, List<User> userList) {
@@ -123,7 +120,7 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
     }
     return userList
         .where((user) =>
-            user.name!.toLowerCase().contains(searchText.toLowerCase()))
+        user.name!.toLowerCase().contains(searchText.toLowerCase()))
         .toList();
   }
 }

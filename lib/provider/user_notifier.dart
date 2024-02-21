@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertest/data/user_datasource.dart';
 import 'package:fluttertest/models/User.dart';
+import 'package:fluttertest/provider/user_provider.dart';
 import 'package:fluttertest/provider/user_state.dart';
 
 class UserNotifier extends StateNotifier<UserState>{
@@ -32,16 +33,18 @@ class UserNotifier extends StateNotifier<UserState>{
     // state =state.copyWith(users: updateUsers);
   }
   //update
-  Future<void>updateUser(int id,String name,String email)async{
-    log('userUpdate' as num);
-    await UserDatasource.updateUser(id,name,email);
-    final updateUser = state.users.map((user){
-      if(user.id == id ){
-        return user.copyWith(name: name,email: email);
-      }else{
-        return user;
-      }
-    }).toList();
-    state =state.copyWith(users: updateUser);
+  Future<void>updateUser(int id,String newName,String newEmail)async{
+    // 更新數據酷的用戶資料
+    await UserDatasource.updateUser(id,newName,newEmail);
+    //更新應用程式狀態
+    state = state.copyWith(
+      users: state.users.map((user) {
+        if (user.id == id) {
+          return user.copyWith(name: newName, email: newEmail);
+        } else {
+          return user;
+        }
+      }).toList(),
+    );
   }
 }

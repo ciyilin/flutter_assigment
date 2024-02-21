@@ -64,7 +64,7 @@ class UserDatasource {
   //update
   static Future<void> updateUser(int id, String name, String email) async {
     await _database?.update(
-        "User", {"name": name, "email": email},
+        "Users", {"name": name, "email": email},
         where: "id = ?",
         whereArgs: [id]);
   }
