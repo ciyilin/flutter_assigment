@@ -1,3 +1,4 @@
+import 'package:fluttertest/models/User.dart';
 import 'package:fluttertest/screen/detail_page.dart';
 import 'package:fluttertest/screen/my_home_page.dart';
 import 'package:go_router/go_router.dart';
@@ -5,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 final router = GoRouter(
     debugLogDiagnostics: true,
-    
+    initialLocation: '/',
     routes:[
     GoRoute(
     path: '/',
@@ -13,7 +14,7 @@ final router = GoRouter(
     routes: [
     GoRoute(
         path: 'detail',
-    builder: (context,state)=> DetailPage()
+    builder: (context,state)=> const DetailPage(),
     )])
     ]
 );

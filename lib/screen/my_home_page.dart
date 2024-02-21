@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertest/utils/extensions.dart';
 import 'package:fluttertest/widgets/user_list.dart'; // Import UserListWidget
 import '../widgets/add_user_dialog.dart';
-import 'detail_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -53,11 +52,3 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-void nextPage(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-        builder: (context) {
-          return  DetailPage();}),
-  );
-}

@@ -22,9 +22,7 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
   late final TextEditingController _searchController;
 
   int get id => id;
-
   String get name => name;
-
   String get email => email;
 
   @override
@@ -41,7 +39,6 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colorScheme;
     final userListState = ref.watch(userProvider);
     final userList = userListState.users;
     final searchText = _searchController.text;
@@ -77,7 +74,7 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                 final user = filteredUsers[index];
                 return GestureDetector(
                   onTap: (){
-                    return context.go('detail');
+                    return context.go('/detail',extra:userList[index] );
                   },
                   child: Slidable(
                   key: const ValueKey(0),
@@ -89,8 +86,7 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                         userNotifier.deleteUser(user.id).then((_) {
                           log("successful delete");
                         });
-                      },
-                    ),
+                      }),
                     children: const <Widget>[
                       SlidableAction(
                         onPressed:doNothing ,
@@ -113,15 +109,8 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                     subtitle: Text(
                       user.email!,
                       style: const TextStyle(fontSize: 12),
-                    ),
-                  ),
-                  ));
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+                    ))));
+              }))]));
   }
 
   List<User> _filterUsers(String searchText, List<User> userList) {
