@@ -46,7 +46,7 @@ class DialogAdd extends ConsumerWidget {
           onPressed: ()  {
             final name = nameController.text;
             final email = emailController.text;
-            final newUser = User(name: name, email: email, id: 0);  //0為默認值
+            final newUser = User(name: name, email: email,id: 0);
             userNotifier.addUser(newUser);
             Navigator.of(context).pop();
           },

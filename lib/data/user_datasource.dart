@@ -14,7 +14,10 @@ class UserDatasource {
     _database = await openDatabase(
         join(await getDatabasesPath(), 'Users.db'), onCreate: (db, version) {
       return db.execute(
-        "CREATE TABLE Users(id TEXT PRIMARY KEY, name TEXT, email TEXT)",
+        "CREATE TABLE Users("
+            "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            " name TEXT, "
+            "email TEXT)",
       );
     }, version: 1);
     return _database;

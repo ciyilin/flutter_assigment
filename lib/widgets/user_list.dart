@@ -81,10 +81,13 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                               dragDismissible: true,
                               motion: const ScrollMotion(),
                               dismissible: DismissiblePane(onDismissed: () {
-                                userNotifier.deleteUser(user.id).then((_) {
+                                if(id != null){
+                                userNotifier.deleteUser(user.id!).then((_) {
                                   log("successful delete");
                                 });
-                              }),
+                                }else{
+                                  log("Error:User ID null");
+                              }}),
                               children: const <Widget>[
                                 SlidableAction(
                                   onPressed: doNothing,

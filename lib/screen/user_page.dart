@@ -22,6 +22,8 @@ class _UesrPageState extends ConsumerState<UserPage> {
 
 
 
+
+
   @override
   void initState() {
     super.initState();
@@ -61,19 +63,19 @@ class _UesrPageState extends ConsumerState<UserPage> {
                       labelText: "Email"),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                      onPressed: _updateUserData,
+                      onPressed:() => updateUserData(widget.user),
                       style: ButtonStyle(shape:MaterialStateProperty.all(RoundedRectangleBorder
                         (borderRadius: BorderRadius.circular(10)))),
                       child: const Text('更新',style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)
                   )
                 ])));
   }
-  void _updateUserData(User user){
+  void updateUserData(User user){
     final newName = _nameController.text;
     final newEmail = _emailController.text;
-    final userId = widget.user.id;
+    final newUser = User(id: user.id,name: newName, email: newEmail);
     //調用 userProvider StateNotifier的updateUser
-    ref.watch(userProvider.notifier).updateUser(user);
+    ref.watch(userProvider.notifier).updateUser(newUser);
     Navigator.pop(context);
   }
 }

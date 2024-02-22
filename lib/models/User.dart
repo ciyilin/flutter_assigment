@@ -1,10 +1,10 @@
 class User {
- int id ;
+ int? id ;
  String? name ;
  String? email ;
 
  User({
-  required this.name,  required this.email, required this.id,
+  required this.name,  required this.email,  this.id,
  });
 
  // 將User對象轉換成 Map

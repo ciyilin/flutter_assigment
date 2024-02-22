@@ -19,6 +19,12 @@ class UserState extends Equatable {
       users: users ?? this.users,
     );
   }
+  
+  //自定義map方法
+  List<T Function(User user)>map<T>(T Function(User)callback){
+    return users.map((e) => callback).toList();
+  }
+  
 
   @override
   List<Object?> get props => [users];
