@@ -33,18 +33,25 @@ class UserNotifier extends StateNotifier<UserState>{
     // state =state.copyWith(users: updateUsers);
   }
   //update
-  Future<void>updateUser(int id,String newName,String newEmail)async{
+  List<User> get user => user;
+
+  Future<void>updateUser(User user)async{
+    UserDatasource.updateUser(user).then((value){
+      loadUsers();
+    });
+
+
     // 更新數據酷的用戶資料
-    await UserDatasource.updateUser(id,newName,newEmail);
+    // await UserDatasource.updateUser(user);
     //更新應用程式狀態
-    state = state.copyWith(
-      users: state.users.map((user) {
-        if (user.id == id) {
-          return user.copyWith(name: newName, email: newEmail);
-        } else {
-          return user;
-        }
-      }).toList(),
-    );
+    // state = state.copyWith(
+    //   users: state.users.map((user) {
+    //     if (user.id == id) {
+    //       return user.copyWith(name: newName, email: newEmail);
+    //     } else {
+    //       return user;
+    //     }
+    //   }).toList(),
+    // );
   }
 }

@@ -68,12 +68,12 @@ class _UesrPageState extends ConsumerState<UserPage> {
                   )
                 ])));
   }
-  void _updateUserData(){
+  void _updateUserData(User user){
     final newName = _nameController.text;
     final newEmail = _emailController.text;
     final userId = widget.user.id;
     //調用 userProvider StateNotifier的updateUser
-    ref.watch(userProvider.notifier).updateUser(userId, newName, newEmail);
+    ref.watch(userProvider.notifier).updateUser(user);
     Navigator.pop(context);
   }
 }
