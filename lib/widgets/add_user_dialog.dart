@@ -43,11 +43,12 @@ class DialogAdd extends ConsumerWidget {
           child: const Text('取消'),
         ),
         TextButton(
-          onPressed: ()  {
+          onPressed: ()  async{
             final name = nameController.text;
             final email = emailController.text;
-            final newUser = User(name: name, email: email,id: 0);
-            userNotifier.addUser(newUser);
+            final newUser = User(name: name, email: email);
+            await userNotifier.addUser(newUser);
+            await userNotifier.loadUsers();
             Navigator.of(context).pop();
           },
           child: const Text('確定'),

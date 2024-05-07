@@ -4,4 +4,10 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- 如果需要在應用在前台時獲取位置 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- 如果需要在應用在後台時也能獲取位置（注意，這可能會影響用戶隱私和電池使用） -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
 </manifest>

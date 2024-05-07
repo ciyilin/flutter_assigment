@@ -38,6 +38,12 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
   Widget build(BuildContext context) {
     final userListState = ref.watch(userProvider);
     final userList = userListState.users;
+    if (userList ==null) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        ref.watch(userProvider.notifier).loadUsers();
+      });
+      return  SizedBox(height: 30, child: Container());
+    }
     final searchText = _searchController.text;
     final userNotifier = ref.watch(userProvider.notifier);
     var filteredUsers = _filterUsers(searchText, userList);
@@ -109,7 +115,7 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                                       fontWeight: FontWeight.normal),
                                 ),
                                 subtitle: Text(
-                                  user.email!,
+                                  user.email??"",
                                   style: const TextStyle(fontSize: 12),
                                 ))));
                   }))
