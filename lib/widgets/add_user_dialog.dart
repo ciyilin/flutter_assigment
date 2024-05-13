@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertest/models/User.dart';
 import 'package:fluttertest/provider/user_provider.dart';
+import 'package:fluttertest/utils/location_permission.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 
@@ -10,9 +11,22 @@ class DialogAdd extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final nameController = TextEditingController(text: '');
-    final emailController = TextEditingController(text: '');
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
     final userNotifier = ref.watch(userProvider.notifier);
+
+    void _handleSubmit(){
+      String name = nameController.text.trim();//移除前後空白
+      String email = emailController.text.trim();
+
+      if(name.isEmpty ){
+        showToast("User name cannot be empty");
+      }else if(email.isEmpty){
+        showToast("User email cannot be empty");
+      }else{
+        showToast("successfully");
+      }
+    }
 
     return AlertDialog(
       title: const Center(child: Text('新增用戶', style: TextStyle(fontSize: 12))),
@@ -38,6 +52,7 @@ class DialogAdd extends ConsumerWidget {
       actions: [
         TextButton(
           onPressed: () {
+            _handleSubmit();
             Navigator.of(context).pop();
           },
           child: const Text('取消'),
