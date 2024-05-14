@@ -9,12 +9,19 @@ class User {
 
  // 將User對象轉換成 Map
  Map<String, dynamic> toMap() {
-  return {
-   'id': id,
-   'name': name,
-   'email': email,
-  };
- }
+    if (id != null) {
+      return {
+        'id': id,
+        'name': name,
+        'email': email,
+      };
+    } else {
+      return {
+        'name': name,
+        'email': email,
+      };
+    }
+  }
 
   User copyWith({
    int? id,

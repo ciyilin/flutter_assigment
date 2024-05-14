@@ -14,18 +14,15 @@ class UserListWidget extends ConsumerStatefulWidget {
 }
 
 class _UserListWidgetState extends ConsumerState<UserListWidget> {
-  late final TextEditingController _searchController;
-
-  int get id => id;
-
-  String get name => name;
-
-  String get email => email;
+  late final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _searchController = TextEditingController();
+    _searchController;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.watch(userProvider.notifier).loadUsers();
+    });
   }
 
   @override
@@ -57,9 +54,8 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
             ),
             onChanged: (value) {
               setState(() {
-                _searchController.text = value;
+                filteredUsers = _filterUsers(searchText, userList);
               });
-              filteredUsers = _filterUsers(searchText, userList);
             },
           ),
           const SizedBox(height: 12),
@@ -76,21 +72,24 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                                   builder: (context) => UserPage(user: user)));
                         },
                         child: Slidable(
-                            key: const ValueKey(0),
+                            key: ValueKey(user.id),
                             startActionPane: ActionPane(
                               dragDismissible: true,
                               motion: const ScrollMotion(),
                               dismissible: DismissiblePane(onDismissed: () {
-                                if(id != null){
-                                userNotifier.deleteUser(user.id!).then((_) {
-                                  log("successful delete");
-                                });
-                                }else{
+                                if (user.id != null) {
+                                  userNotifier.deleteUser(user.id!).then((_) {
+                                    log("successful delete");
+                                  });
+                                } else {
                                   log("Error:User ID null");
-                              }}),
-                              children: const <Widget>[
+                                }
+                              }),
+                              children: <Widget>[
                                 SlidableAction(
-                                  onPressed: doNothing,
+                                  onPressed: (BuildContext context) {
+                                    userNotifier.deleteUser(user.id!);
+                                  },
                                   backgroundColor: Color(0xFFFE4A49),
                                   foregroundColor: Colors.white,
                                   icon: Icons.delete,
@@ -100,7 +99,11 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                             ),
                             child: ListTile(
                                 leading: CircleAvatar(
-                                  child: Image.asset('assets/image/user.png',height: 20,width: 20,),
+                                  child: Image.asset(
+                                    'assets/image/user.png',
+                                    height: 20,
+                                    width: 20,
+                                  ),
                                 ),
                                 title: Text(
                                   user.name!,
@@ -109,7 +112,7 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                                       fontWeight: FontWeight.normal),
                                 ),
                                 subtitle: Text(
-                                  user.email!,
+                                  user.email ?? "",
                                   style: const TextStyle(fontSize: 12),
                                 ))));
                   }))
@@ -123,7 +126,7 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
     }
     return userList
         .where((user) =>
-        user.name!.toLowerCase().contains(searchText.toLowerCase()))
+            user.name!.toLowerCase().contains(searchText.toLowerCase()))
         .toList();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:fluttertest/models/User.dart';
 import 'package:fluttertest/provider/user_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -43,11 +44,19 @@ class DialogAdd extends ConsumerWidget {
           child: const Text('取消'),
         ),
         TextButton(
-          onPressed: ()  {
+          onPressed: ()  async{
             final name = nameController.text;
             final email = emailController.text;
-            final newUser = User(name: name, email: email,id: 0);
-            userNotifier.addUser(newUser);
+            if(name.isEmpty || email.isEmpty){
+              showToast("Name and email cannot be empty",
+                  context: context,
+                animation: StyledToastAnimation.none,
+                position: StyledToastPosition.center,
+              );
+            }else{
+              final newUser = User(name: name, email: email);
+              await userNotifier.addUser(newUser);
+            await userNotifier.loadUsers();}
             Navigator.of(context).pop();
           },
           child: const Text('確定'),
