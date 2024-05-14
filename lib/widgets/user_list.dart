@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -14,18 +14,14 @@ class UserListWidget extends ConsumerStatefulWidget {
 }
 
 class _UserListWidgetState extends ConsumerState<UserListWidget> {
-  late final TextEditingController _searchController;
+  late final TextEditingController _searchController = TextEditingController();
 
   int get id => id;
 
-  String get name => name;
-
-  String get email => email;
 
   @override
   void initState() {
     super.initState();
-    _searchController = TextEditingController();
   }
 
   @override
@@ -38,15 +34,17 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
   Widget build(BuildContext context) {
     final userListState = ref.watch(userProvider);
     final userList = userListState.users;
-    if (userList ==null) {
+    if (userList == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         ref.watch(userProvider.notifier).loadUsers();
       });
-      return  SizedBox(height: 30, child: Container());
+      return SizedBox(height: 30, child: Container());
     }
     final searchText = _searchController.text;
-    final userNotifier = ref.watch(userProvider.notifier);
-    var filteredUsers = _filterUsers(searchText, userList);
+    _filterUsers(searchText, userList);
+    final filterUser = _filterUsers(searchText, userList);
+
+
     return Padding(
         padding: const EdgeInsets.all(8),
         child: Column(children: [
@@ -65,15 +63,14 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
               setState(() {
                 _searchController.text = value;
               });
-              filteredUsers = _filterUsers(searchText, userList);
             },
           ),
           const SizedBox(height: 12),
           Expanded(
               child: ListView.builder(
-                  itemCount: filteredUsers.length,
+                  itemCount: _filterUsers(searchText, userList).length,
                   itemBuilder: (context, index) {
-                    final user = filteredUsers[index];
+                    final user = _filterUsers(searchText, userList)[index];
                     return GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -88,13 +85,13 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                               motion: const ScrollMotion(),
                               dismissible: DismissiblePane(
                                 onDismissed: () {
-                                  ref.watch(userNotifier.state.)
-                                },
+                                  ref.watch(userProvider.notifier).deleteUser(id);
+                                }
                               ),
-                              children: const <Widget>[
+                              children: <Widget>[
                                 SlidableAction(
                                   onPressed: doNothing,
-                                  backgroundColor: Color(0xFFFE4A49),
+                                  backgroundColor: const Color(0xFFFE4A49),
                                   foregroundColor: Colors.white,
                                   icon: Icons.delete,
                                   label: 'Delete',
@@ -103,7 +100,11 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                             ),
                             child: ListTile(
                                 leading: CircleAvatar(
-                                  child: Image.asset('assets/image/user.png',height: 20,width: 20,),
+                                  child: Image.asset(
+                                    'assets/image/user.png',
+                                    height: 20,
+                                    width: 20,
+                                  ),
                                 ),
                                 title: Text(
                                   user.name!,
@@ -112,7 +113,7 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                                       fontWeight: FontWeight.normal),
                                 ),
                                 subtitle: Text(
-                                  user.email??"",
+                                  user.email ?? "",
                                   style: const TextStyle(fontSize: 12),
                                 ))));
                   }))
@@ -129,19 +130,6 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
         user.name!.toLowerCase().contains(searchText.toLowerCase()))
         .toList();
   }
+
+  void doNothing(BuildContext context) {}
 }
-
-void doNothing(BuildContext context) {}
-
-void onDismissed(int index ,SlidableAction action){
-
-}
-//
-// DismissiblePane(onDismissed: () {
-// if(id != null){
-// userNotifier.deleteUser(user.id!).then((_) {
-// log("successful delete");
-// });
-// }else{
-// log("Error:User ID null");
-// }})

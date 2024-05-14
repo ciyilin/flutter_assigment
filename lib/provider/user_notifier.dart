@@ -4,10 +4,12 @@ import 'package:fluttertest/models/User.dart';
 import 'package:fluttertest/provider/user_state.dart';
 
 class UserNotifier extends StateNotifier<UserState> {
-  List<User>? _userList;
   UserNotifier(UserState state) : super(state);
 
-  //在入用戶數據
+  List<User> _userList = [];
+
+
+  //載入用戶數據
   Future<void> loadUsers() async {
     final List<User> users = await UserDatasource.getUsers();
     state = state.copyWith(users: users);
@@ -24,9 +26,14 @@ class UserNotifier extends StateNotifier<UserState> {
 
   //delete
   Future<void> deleteUser(int id) async {
-    await UserDatasource.deleteUser(id);
-    _userList??[];
+    try{
+      await UserDatasource.deleteUser(id);
+    _userList??=[];
     _userList!.removeWhere((element) => element.id == id);
+    state = List<User>.from(_userList!) as UserState ;
+    }catch(e){
+      print('Faile to delete user:$e');
+    }
   }
 
   //update
