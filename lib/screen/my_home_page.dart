@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertest/utils/extensions.dart';
 import 'package:fluttertest/widgets/user_list.dart'; // Import UserListWidget
+import '../main.dart';
+import '../utils/location_permission.dart';
 import '../widgets/add_user_dialog.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -39,6 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.purple,
         onPressed: () {
+          requestLocationPermission();
           showDialog(
             context: context,
             builder: (context) {
@@ -51,4 +55,5 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
 
