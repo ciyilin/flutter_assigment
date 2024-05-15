@@ -20,7 +20,7 @@ class UserDatasource {
             "email TEXT)",
       );
     }
-        , version: 1);
+    , version: 1);
     return _database;
   }
 
@@ -78,4 +78,3 @@ class UserDatasource {
       throw extension('database connection error ');
     }
   }
-}

@@ -62,7 +62,7 @@ class DialogAdd extends ConsumerWidget {
             if (name.isEmpty || email.isEmpty) {
               showToast("Name and email cannot be empty");
             } else {
-              final newUser = User(name: name, email: email);
+              final newUser = User(name: name, email: email );
               await userNotifier.addUser(newUser);
             }
             Navigator.of(context).pop();

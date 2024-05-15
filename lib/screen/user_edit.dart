@@ -39,7 +39,8 @@ class _UserEditorState extends ConsumerState<UserEditor> {
   void _updateUser(){
     final newName = _nameController.text;
     final newEmail = _emailController.text;
-    final updateUser = User(name: newName, email: newEmail,id:widget.user.id );
+    final userId = widget.user.id;
+    final updateUser = User(name: newName, email: newEmail,id:userId);
     ref.read(userProvider.notifier).updateUser(updateUser);
     Navigator.pop(context);
   }
@@ -49,6 +50,7 @@ class _UserEditorState extends ConsumerState<UserEditor> {
   @override
   Widget build(BuildContext context) {
     final color = context.colorScheme;
+    print('ID ${widget.user.id}');
     return Scaffold(
         backgroundColor: color.background,
         appBar: AppBar(

@@ -12,8 +12,8 @@ class UserState {
 class UserNotifier extends StateNotifier<UserState> {
   UserNotifier(UserState initial) : super(UserState.initial);
 
-  List<User> _originalUsers = [];
-  get originalUsers => _originalUsers;
+  // List<User> _originalUsers = [];
+  // get originalUsers => _originalUsers;
 
 
   //載入用戶數據
@@ -43,7 +43,7 @@ class UserNotifier extends StateNotifier<UserState> {
       final updateUsers = state.users.map((user) =>
       user.id == newUser.id ? newUser : user).toList();
       state = UserState(users: updateUsers);
-      print('Success to update');
+      print('Success to update${newUser.id},${newUser.name},${newUser.email}');
     }catch(e){
       print('Failed to update:$e');
     }

@@ -72,7 +72,8 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                           Navigator.push(
                               (context),
                               MaterialPageRoute(
-                                  builder: (context) => UserEditor(user: user,)));
+                                  builder: (context) => UserEditor(user: user)
+                              ));
                         },
                         child: Dismissible(
                             key: ValueKey(user.id),
