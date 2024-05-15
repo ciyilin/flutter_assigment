@@ -4,10 +4,9 @@ import 'package:fluttertest/screen/my_home_page.dart';
 import 'package:fluttertest/utils/extensions.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp( ProviderScope(child: MyApp()));
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -15,21 +14,9 @@ class MyApp extends StatefulWidget {
 
   @override
   State<MyApp> createState() => _MyApp();
-
 }
 
-
-
-class _MyApp  extends State<MyApp>{
-
-  // @override
-  // void initState(){
-  //   super.initState();
-  // }
-  // void _listenForPermissionStates() async{
-  //   final status = await PermissionStatus.values;
-  // }
-
+class _MyApp extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
@@ -37,24 +24,20 @@ class _MyApp  extends State<MyApp>{
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        backgroundColor:colors.onPrimary,
+        backgroundColor: colors.onPrimary,
       ),
       home: const MyHomePage(),
     );
   }
 }
 
-
- void requestLocationPermission() async {
+void requestLocationPermission() async {
   var status = await Permission.locationWhenInUse.request();
-  if(status.isGranted){
+  if (status.isGranted) {
     print('Location is Granted');
-  }else if(status.isDenied){
+  } else if (status.isDenied) {
     print('Location is Defined');
-  }else if(status.isPermanentlyDenied){
-    openAppSettings();
+  } else if (status.isPermanentlyDenied) {
+    print('Location is PermanentlyDenied');
   }
 }
-
-
-

@@ -1,10 +1,11 @@
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertest/provider/user_provider.dart';
 import '../models/User.dart';
-import '../screen/user_page.dart';
+import '../screen/user_edit.dart';
 
 class UserListWidget extends ConsumerStatefulWidget {
   const UserListWidget({Key? key}) : super(key: key);
@@ -15,23 +16,16 @@ class UserListWidget extends ConsumerStatefulWidget {
 
 class _UserListWidgetState extends ConsumerState<UserListWidget> {
   late final TextEditingController _searchController = TextEditingController();
-<<<<<<< HEAD
-=======
 
   int get id => id;
-
->>>>>>> bebba83de3a3abec87cda99cc9780fc7e09a47ef
 
   @override
   void initState() {
     super.initState();
-<<<<<<< HEAD
     _searchController;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(userProvider.notifier).loadUsers();
+      ref.read(userProvider.notifier).loadUsers();
     });
-=======
->>>>>>> bebba83de3a3abec87cda99cc9780fc7e09a47ef
   }
 
   @override
@@ -44,16 +38,8 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
   Widget build(BuildContext context) {
     final userListState = ref.watch(userProvider);
     final userList = userListState.users;
-    if (userList == null) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        ref.watch(userProvider.notifier).loadUsers();
-      });
-      return SizedBox(height: 30, child: Container());
-    }
     final searchText = _searchController.text;
-    _filterUsers(searchText, userList);
     final filterUser = _filterUsers(searchText, userList);
-
 
     return Padding(
         padding: const EdgeInsets.all(8),
@@ -71,7 +57,7 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
             ),
             onChanged: (value) {
               setState(() {
-                filteredUsers = _filterUsers(searchText, userList);
+                filterUser;
               });
             },
           ),
@@ -86,45 +72,28 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                           Navigator.push(
                               (context),
                               MaterialPageRoute(
-                                  builder: (context) => UserPage(user: user)));
+                                  builder: (context) => UserEditor(user: user,)));
                         },
-                        child: Slidable(
+                        child: Dismissible(
                             key: ValueKey(user.id),
-                            startActionPane: ActionPane(
-                              dragDismissible: true,
-                              motion: const ScrollMotion(),
-<<<<<<< HEAD
-                              dismissible: DismissiblePane(onDismissed: () {
-                                if (user.id != null) {
-                                  userNotifier.deleteUser(user.id!).then((_) {
-                                    log("successful delete");
+                            direction: DismissDirection.startToEnd,
+                            onDismissed: (direction) {
+                              if (user.id != null) {
+                                ref.watch(userProvider.notifier).deleteUser(user.id!).then((_) {
+                                  setState(() {
+                                    ref.watch(userProvider.notifier).loadUsers();
                                   });
-                                } else {
-                                  log("Error:User ID null");
-                                }
-                              }),
-                              children: <Widget>[
-                                SlidableAction(
-                                  onPressed: (BuildContext context) {
-                                    userNotifier.deleteUser(user.id!);
-                                  },
-                                  backgroundColor: Color(0xFFFE4A49),
-=======
-                              dismissible: DismissiblePane(
-                                onDismissed: () {
-                                  ref.watch(userProvider.notifier).deleteUser(id);
-                                }
-                              ),
-                              children: <Widget>[
-                                SlidableAction(
-                                  onPressed: doNothing,
-                                  backgroundColor: const Color(0xFFFE4A49),
->>>>>>> bebba83de3a3abec87cda99cc9780fc7e09a47ef
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.delete,
-                                  label: 'Delete',
-                                ),
-                              ],
+                                  log("successful delete");
+                                });
+                              } else {
+                                log("Error:User ID null");
+                              }
+                            },
+                            background: Container(
+                              color: Colors.red,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(horizontal: 18),
+                              child: const Icon(Icons.delete,color: Colors.white),
                             ),
                             child: ListTile(
                                 leading: CircleAvatar(
@@ -161,3 +130,4 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
 
   void doNothing(BuildContext context) {}
 }
+

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:fluttertest/models/User.dart';
 import 'package:fluttertest/provider/user_provider.dart';
 import 'package:fluttertest/utils/location_permission.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-
 
 class DialogAdd extends ConsumerWidget {
   const DialogAdd({Key? key}) : super(key: key);
@@ -16,15 +13,15 @@ class DialogAdd extends ConsumerWidget {
     final TextEditingController emailController = TextEditingController();
     final userNotifier = ref.watch(userProvider.notifier);
 
-    void _handleSubmit(){
-      String name = nameController.text.trim();//移除前後空白
+    void _handleSubmit() {
+      String name = nameController.text.trim(); //移除前後空白
       String email = emailController.text.trim();
 
-      if(name.isEmpty ){
+      if (name.isEmpty) {
         showToast("User name cannot be empty");
-      }else if(email.isEmpty){
+      } else if (email.isEmpty) {
         showToast("User email cannot be empty");
-      }else{
+      } else {
         showToast("successfully");
       }
     }
@@ -59,25 +56,15 @@ class DialogAdd extends ConsumerWidget {
           child: const Text('取消'),
         ),
         TextButton(
-          onPressed: ()  async{
+          onPressed: () async {
             final name = nameController.text;
             final email = emailController.text;
-<<<<<<< HEAD
-            if(name.isEmpty || email.isEmpty){
-              showToast("Name and email cannot be empty",
-                  context: context,
-                animation: StyledToastAnimation.none,
-                position: StyledToastPosition.center,
-              );
-            }else{
+            if (name.isEmpty || email.isEmpty) {
+              showToast("Name and email cannot be empty");
+            } else {
               final newUser = User(name: name, email: email);
               await userNotifier.addUser(newUser);
-            await userNotifier.loadUsers();}
-=======
-            final newUser = User(name: name, email: email);
-            await userNotifier.addUser(newUser);
-            await userNotifier.loadUsers();
->>>>>>> bebba83de3a3abec87cda99cc9780fc7e09a47ef
+            }
             Navigator.of(context).pop();
           },
           child: const Text('確定'),
@@ -85,6 +72,4 @@ class DialogAdd extends ConsumerWidget {
       ],
     );
   }
-
 }
-

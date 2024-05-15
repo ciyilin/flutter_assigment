@@ -19,7 +19,8 @@ class UserDatasource {
             " name TEXT, "
             "email TEXT)",
       );
-    }, version: 1);
+    }
+        , version: 1);
     return _database;
   }
 
@@ -36,11 +37,12 @@ class UserDatasource {
     final Database? db = await getDBConnet();
     final List<Map<String, dynamic>> maps =
         await db?.query('Users') ?? []; //空值檢查
+    print("資料讀取${maps.length}");
     return List.generate(maps.length, (index) {
       return User(
         id: maps[index]['id'],
         name: maps[index]['name'],
-        email: maps[index]['index'],
+        email: maps[index]['email'],
       );
     });
   }
@@ -66,9 +68,14 @@ class UserDatasource {
 
   //update
   static Future<void> updateUser(User user) async {
-    await _database?.update(
-        "Users", {"name": user.name, "email": user.email},
-        where: "id = ?",
-        whereArgs: [user.id]);
+    Database? database = await getDBConnet();
+    if (database != null) {
+      await database.update(
+          "Users", {"name": user.name, "email": user.email},
+          where: "id = ?",
+          whereArgs: [user.id]);
+    } else {
+      throw extension('database connection error ');
+    }
   }
 }

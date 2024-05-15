@@ -7,28 +7,26 @@ import 'package:fluttertest/utils/utils.dart';
 
 import '../widgets/custom_text_field.dart';
 
-class UserPage extends ConsumerStatefulWidget {
+class UserEditor extends ConsumerStatefulWidget {
   final User user;
-
-  const UserPage({Key? key, required this.user}) : super(key: key);
+  const UserEditor( {Key? key,required this.user}) : super(key: key);
 
   @override
-  _UesrPageState createState() => _UesrPageState();
+  _UserEditorState createState() => _UserEditorState();
 }
 
-class _UesrPageState extends ConsumerState<UserPage> {
-  late TextEditingController _nameController;
-  late TextEditingController _emailController;
-
-
+class _UserEditorState extends ConsumerState<UserEditor> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
 
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.user.name);
-    _emailController = TextEditingController(text: widget.user.email);
+    // 设置控制器的初始值
+    _nameController.text = widget.user.name!;
+    _emailController.text =widget.user.email!;
   }
 
   @override
@@ -38,6 +36,16 @@ class _UesrPageState extends ConsumerState<UserPage> {
     super.dispose();
   }
 
+  void _updateUser(){
+    final newName = _nameController.text;
+    final newEmail = _emailController.text;
+    final updateUser = User(name: newName, email: newEmail,id:widget.user.id );
+    ref.read(userProvider.notifier).updateUser(updateUser);
+    Navigator.pop(context);
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     final color = context.colorScheme;
@@ -45,7 +53,7 @@ class _UesrPageState extends ConsumerState<UserPage> {
         backgroundColor: color.background,
         appBar: AppBar(
           backgroundColor: color.primary,
-          title: const Text('User Page'),
+          title: const Text('Edit User Profile'),
           centerTitle: true,
         ),
         body: Padding(
@@ -63,20 +71,14 @@ class _UesrPageState extends ConsumerState<UserPage> {
                       labelText: "Email"),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                      onPressed:() => updateUserData(widget.user),
+                      onPressed:() {
+                        _updateUser();
+                      },
                       style: ButtonStyle(shape:MaterialStateProperty.all(RoundedRectangleBorder
                         (borderRadius: BorderRadius.circular(10)))),
                       child: const Text('更新',style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)
                   )
                 ])));
-  }
-  void updateUserData(User user){
-    final newName = _nameController.text;
-    final newEmail = _emailController.text;
-    final newUser = User(id: user.id,name: newName, email: newEmail);
-    //調用 userProvider StateNotifier的updateUser
-    ref.watch(userProvider.notifier).updateUser(newUser);
-    Navigator.pop(context);
   }
 }
 
