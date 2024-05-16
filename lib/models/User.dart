@@ -9,18 +9,14 @@ class User {
 
  // 將User對象轉換成 Map
  Map<String, dynamic> toMap() {
-    if (id != null) {
-      return {
-        'id': id,
-        'name': name,
-        'email': email,
-      };
-    } else {
-      return {
-        'name': name,
-        'email': email,
-      };
-    }
+   return {
+     'id': id,
+     'name': name,
+     'email': email,
+   };
+  }
+  factory User.fromMap(){
+
   }
 
   User copyWith({

@@ -80,7 +80,7 @@ class _UserListWidgetState extends ConsumerState<UserListWidget> {
                             direction: DismissDirection.startToEnd,
                             onDismissed: (direction) {
                               if (user.id != null) {
-                                ref.watch(userProvider.notifier).deleteUser(user.id!).then((_) {
+                                ref.watch(userProvider.notifier).deleteUser(user.id! as int).then((_) {
                                   setState(() {
                                     ref.watch(userProvider.notifier).loadUsers();
                                   });

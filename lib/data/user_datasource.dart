@@ -20,7 +20,7 @@ class UserDatasource {
             "email TEXT)",
       );
     }
-    , version: 1);
+        , version: 1);
     return _database;
   }
 
@@ -50,8 +50,12 @@ class UserDatasource {
   //新增
   static Future<void> addUser(User user) async {
     final Database? db = await getDBConnet();
-    await db?.insert(
-      'Users', user.toMap(),
+    if(db = null){
+      throw Exception('DataBase connection  is null');
+    }
+    int id = await db.insert(
+      'Users', user.toMap());
+    newUser = user.copyWith(id: id);
       conflictAlgorithm: ConflictAlgorithm.replace, //處理衝突時刪除已有數據,新數據替換
     );
   }
@@ -78,3 +82,4 @@ class UserDatasource {
       throw extension('database connection error ');
     }
   }
+}
